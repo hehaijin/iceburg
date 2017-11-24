@@ -23,7 +23,7 @@ trainlabel=np_utils.to_categorical(trainlabel,2)
 
 testfile=open(path.join(datapath, 'test.json'))
 data=pd.read_json(testfile)
-testid=data["id"]
+testid=np.array(data["id"])
 testdata= np.asarray([np.asarray(p).reshape(75,75) for p in data['band_1']])
 testdata = traindata.reshape(4812,75,75,1)
 testdata=np.concatenate((testdata,testdata,testdata),axis=3)
@@ -52,7 +52,7 @@ my_model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 my_model.fit(traindata, trainlabel, 
-          batch_size=32, epochs=10, verbose=1)
+          batch_size=32, epochs=1, verbose=1)
 
 
 result= my_model.predict(testdata,batch_size=32, verbose=1)
@@ -60,7 +60,7 @@ result= my_model.predict(testdata,batch_size=32, verbose=1)
 
 finalresult=np.zeros(4812)
 for i in range(result.shape[0]):
-	if result[i][1]>  result[i][1][0]:
+	if result[i][1]>  result[i][0]:
 		finalresult[i]=1
 
 submission=pd.pd.dataFrame({"id": testid, "is_iceberg": finalresult}) 
