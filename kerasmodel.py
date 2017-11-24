@@ -54,7 +54,7 @@ my_model.compile(loss='mean_squared_error',
               metrics=['accuracy'])
 
 my_model.fit(traindata, trainlabel, 
-          batch_size=32, epochs=10, verbose=1)
+          batch_size=32, epochs=100, verbose=1)
 result= my_model.predict(testdata,batch_size=32, verbose=1)
 
 
