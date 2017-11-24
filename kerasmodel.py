@@ -1,4 +1,5 @@
 import numpy as np
+from keras import optimizers
 import keras
 import pandas as pd
 from keras.models import Sequential,Model
@@ -9,7 +10,7 @@ from keras.utils import np_utils
 import os.path as path
 from keras.applications.vgg16 import VGG16
 
-datapath='.\data\processed'
+datapath='./data/processed'
 
 trainfile=open(path.join(datapath, 'train.json'))
 data=pd.read_json(trainfile)
@@ -46,10 +47,10 @@ x = Dense(2, activation='softmax', name='predictions')(x)
 my_model = Model(input=input, output=x)
 my_model.summary()
 
+sgd = optimizers.SGD(lr=0.0001)
 
-
-my_model.compile(loss='categorical_crossentropy',
-              optimizer='adam',
+my_model.compile(loss='mean_squared_error',
+              optimizer=sgd,
               metrics=['accuracy'])
 
 my_model.fit(traindata, trainlabel, 
@@ -57,13 +58,7 @@ my_model.fit(traindata, trainlabel,
 result= my_model.predict(testdata,batch_size=32, verbose=1)
 
 
-finalresult=np.zeros(8424)
-for i in range(result.shape[0]):
-	if result[i][1]>  result[i][0]:
-		finalresult[i]=1
-
-submission=pd.DataFrame({"id": testid, "is_iceberg": finalresult},index_col='id') 
-submission.to_csv("submission.csv")
-
+submission=pd.DataFrame({"id": testid, "is_iceberg": result[:,1]}) 
+submission.to_csv("submission.csv",index=False)
 
 
