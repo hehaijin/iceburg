@@ -10,6 +10,9 @@ from keras.utils import np_utils
 import os.path as path
 from keras.applications.vgg16 import VGG16
 
+
+
+#read data
 datapath='./data/processed'
 
 trainfile=open(path.join(datapath, 'train.json'))
@@ -30,6 +33,12 @@ testdata= np.asarray([np.asarray(p).reshape(75,75) for p in data['band_1']])
 testdata = testdata.reshape(8424,75,75,1)
 testdata=np.concatenate((testdata,testdata,testdata),axis=3)
 
+
+
+
+
+
+#define model. it's simple VGG-16 with reduced full connectted layer.
 
 model_vgg16_conv = VGG16(weights='imagenet', include_top=False)
 #model_vgg16_conv.summary()
@@ -53,11 +62,17 @@ my_model.compile(loss='mean_squared_error',
               optimizer=sgd,
               metrics=['accuracy'])
 
+
+
+#train model
 my_model.fit(traindata, trainlabel, 
           batch_size=32, epochs=100, verbose=1)
+          
+#predict          
 result= my_model.predict(testdata,batch_size=32, verbose=1)
 
 
+#write to csv file.
 submission=pd.DataFrame({"id": testid, "is_iceberg": result[:,1]}) 
 submission.to_csv("submission.csv",index=False)
 
