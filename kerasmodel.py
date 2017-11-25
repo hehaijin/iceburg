@@ -19,8 +19,12 @@ trainfile=open(path.join(datapath, 'train.json'))
 data=pd.read_json(trainfile)
 
 traindata= np.asarray([np.asarray(p).reshape(75,75) for p in data['band_1']])
+traindata2= np.asarray([np.asarray(p).reshape(75,75) for p in data['band_2']])
+
 traindata = traindata.reshape(1604,75,75,1)
-traindata=np.concatenate((traindata,traindata,traindata),axis=3)
+traindata2 = traindata2.reshape(1604,75,75,1)
+
+traindata=np.concatenate((traindata,traindata2,(traindata+traindata2)/2),axis=3)
 trainlabel=np.array(data["is_iceberg"])
 trainlabel=np_utils.to_categorical(trainlabel,2)
 
@@ -30,8 +34,12 @@ data=pd.read_json(testfile)
 testid=np.array(data["id"])  #8424
 
 testdata= np.asarray([np.asarray(p).reshape(75,75) for p in data['band_1']])
+testdata2= np.asarray([np.asarray(p).reshape(75,75) for p in data['band_2']])
+
 testdata = testdata.reshape(8424,75,75,1)
-testdata=np.concatenate((testdata,testdata,testdata),axis=3)
+testdata2 = testdata2.reshape(8424,75,75,1)
+
+testdata=np.concatenate((testdata,testdata2,(testdata+testdata2)/2),axis=3)
 
 
 
@@ -66,7 +74,7 @@ my_model.compile(loss='mean_squared_error',
 
 #train model
 my_model.fit(traindata, trainlabel, 
-          batch_size=32, epochs=100, verbose=1)
+          batch_size=32, epochs=1000, verbose=1)
           
 #predict          
 result= my_model.predict(testdata,batch_size=32, verbose=1)
