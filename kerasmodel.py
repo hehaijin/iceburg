@@ -102,6 +102,9 @@ def main():
 	#preprocessing 
 	traindata=preprocessing(traindata) 
 	testdata=preprocessing(testdata)
+	
+	'''
+	#I do not know how to use imagedatagenerator
 	train_datagen = ImageDataGenerator(
 		samplewise_center=True,
 		samplewise_std_normalization=True,
@@ -114,6 +117,7 @@ def main():
         
     
 	my_model.fit_generator(train_datagen.flow(traindata,trainlabel),steps_per_epoch=50,epochs=50 )
+	'''
     #fit   
     #my_model.fit(traindata, trainlabel, 
     #      batch_size=32, epochs=100, verbose=1)          
