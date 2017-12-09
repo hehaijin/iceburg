@@ -24,7 +24,7 @@ from keras.preprocessing.image import ImageDataGenerator
 def create_dataset():
 #read data
 #datapath='./data/processed'
-	datapath=paht.join(os.getcwd(),"data","processed")
+	datapath=path.join(os.getcwd(),"data","processed")
 
 	trainfile=open(path.join(datapath, 'train.json'))
 	data=pd.read_json(trainfile)
@@ -51,7 +51,7 @@ def create_dataset():
 	testdata2 = testdata2.reshape(8424,75,75,1)
 
 	testdata=np.concatenate((testdata,testdata2,(testdata+testdata2)/2),axis=3)
-	return traindata,trainlabel,testdata2
+	return traindata,trainlabel,testdata
 
 
 
@@ -109,15 +109,15 @@ def main():
 	
 	#I do not know how to use imagedatagenerator
 	train_datagen = ImageDataGenerator(
-		samplewise_center=True,
-		samplewise_std_normalization=True,
-		rotation_range=20,
-		zoom_range=0.2,
-		width_shift_range=0.1,
-		height_shift_range=0.1,
+		#samplewise_center=True,
+		#samplewise_std_normalization=True,
+		#rotation_range=20,
+		zoom_range=[0,0.3],
+		#width_shift_range=0.1,
+		#height_shift_range=0.1,
 		horizontal_flip=True,
 		vertical_flip=True)
-	
+		
         
     
 	my_model.fit_generator(train_datagen.flow(traindata,trainlabel,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=50)
