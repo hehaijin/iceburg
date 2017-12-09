@@ -122,15 +122,15 @@ def main():
 		vertical_flip=False)
         
     
-	my_model.fit_generator(train_datagen.flow(traindata,trainlabel,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=10)
+	my_model.fit_generator(train_datagen.flow(traindata,trainlabel,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=50)
 	
     #fit   
     #my_model.fit(traindata, trainlabel, 
     #      batch_size=32, epochs=100, verbose=1)          
 	#predict          
-	#result= my_model.predict(testdata,batch_size=32, verbose=1)
+	result= my_model.predict(testdata,batch_size=32, verbose=1)
 	
-	result=my_model.predict_generator(test_datagen.flow(testdata,batch_size=1),verbose=1,steps=8424)
+	#result=my_model.predict_generator(test_datagen.flow(testdata,batch_size=1),verbose=1,steps=8424)
 	#write to csv file.
 	submission=pd.DataFrame({"id": testid, "is_iceberg": result[:,1]}) 
 	submission.to_csv("submission.csv",index=False)
