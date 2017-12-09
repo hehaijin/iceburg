@@ -75,9 +75,9 @@ def getModel():
 	my_model = Model(input=input, output=x)
 	my_model.summary()
 
-	sgd = optimizers.SGD(lr=0.0001)
+	sgd = optimizers.SGD(lr=0.0005,momentum=0.7)
 
-	my_model.compile(loss='mean_squared_error',
+	my_model.compile(loss='binary_crossentropy',
 				  optimizer=sgd,
 				  metrics=['accuracy'])
 	return my_model
@@ -88,11 +88,13 @@ def getModel():
 
 
 def preprocessing(data):
-	
-	
-	
-	
-	
+	#can add more preprocessing here.
+	#but do not overlap with the imagedatagenerator.
+	for i in range(3):
+		m1=data[:,:,:,i].min()
+		m2=data[:,:,:,i].max()
+		if m2-m1 !=0:
+			data[:,:,:,i]=(data[:,:,:,i]-m1)/(m2-m1)
 	return data
 
 
