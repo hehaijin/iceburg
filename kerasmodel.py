@@ -51,7 +51,7 @@ def create_dataset():
 	testdata2 = testdata2.reshape(8424,75,75,1)
 
 	testdata=np.concatenate((testdata,testdata2,(testdata+testdata2)/2),axis=3)
-	return traindata,trainlabel,testdata
+	return traindata,trainlabel,testdata,testid
 
 
 
@@ -100,7 +100,7 @@ def preprocessing(data):
 
 def main():
 	my_model=getModel()
-	traindata,trainlabel,testdata=create_dataset()
+	traindata,trainlabel,testdata,testid=create_dataset()
 
 	#preprocessing 
 	traindata=preprocessing(traindata) 
