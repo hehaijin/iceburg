@@ -112,7 +112,7 @@ def main():
 		#samplewise_center=True,
 		#samplewise_std_normalization=True,
 		#rotation_range=20,
-		zoom_range=[0,0.3],
+		#zoom_range=[0,0.3],
 		#width_shift_range=0.1,
 		#height_shift_range=0.1,
 		horizontal_flip=True,
@@ -130,10 +130,12 @@ def main():
 	#predict          
 	result= my_model.predict(testdata,batch_size=32, verbose=1)
 	
-	#result=my_model.predict_generator(test_datagen.flow(testdata,batch_size=1),verbose=1,steps=8424)
+	result2=my_model.predict_generator(test_datagen.flow(testdata,batch_size=1),verbose=1,steps=8424)
 	#write to csv file.
 	submission=pd.DataFrame({"id": testid, "is_iceberg": result[:,1]}) 
 	submission.to_csv("submission.csv",index=False)
+	submission2=pd.DataFrame({"id": testid, "is_iceberg": result2[:,1]}) 
+	submission2.to_csv("submission2.csv",index=False)
 
 if __name__ == "__main__":
     main()
