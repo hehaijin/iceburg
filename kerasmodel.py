@@ -124,7 +124,7 @@ def main():
 		vertical_flip=False)
         
     
-	my_model.fit_generator(train_datagen.flow(traindata,trainlabel,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=200)
+	my_model.fit_generator(train_datagen.flow(traindata,trainlabel,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=120)
 	
     #fit   
     #my_model.fit(traindata, trainlabel, 
