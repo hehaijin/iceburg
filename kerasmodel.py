@@ -70,12 +70,15 @@ def getModel():
 
 	x = Flatten(name='flatten')(output_vgg16_conv)
 	x = Dense(1024, activation='relu', name='fc1')(x)
+	x = Dropout(0.8)(x)
 	x = Dense(1024, activation='relu', name='fc2')(x)
 	x = Dense(2, activation='softmax', name='predictions')(x)
 	my_model = Model(input=input, output=x)
 	my_model.summary()
-
-	sgd = optimizers.SGD(lr=0.0005,momentum=0.7)
+	epochs=200
+	learning_rate=0.0005
+	decay_rate=learning_rate/(1+epochs/20)
+	sgd = optimizers.SGD(lr=learning_rate,momentum=0.7,decay=decay_rate)
 
 	my_model.compile(loss='binary_crossentropy',
 				  optimizer=sgd,
@@ -91,10 +94,11 @@ def preprocessing(data):
 	#can add more preprocessing here.
 	#but do not overlap with the imagedatagenerator.
 	for i in range(3):
-		m1=data[:,:,:,i].min()
-		m2=data[:,:,:,i].max()
-		if m2-m1 !=0:
-			data[:,:,:,i]=(data[:,:,:,i]-m1)/(m2-m1)
+		for j in range(data.shape[0]):
+			m1=data[j,:,:,i].min()
+			m2=data[j,:,:,i].max()
+			if m2-m1 !=0:
+				data[j,:,:,i]=(data[j,:,:,i]-m1)/(m2-m1)
 	return data
 
 
@@ -113,10 +117,10 @@ def main():
 	train_datagen = ImageDataGenerator(
 		#samplewise_center=True,
 		#samplewise_std_normalization=True,
-		#rotation_range=20,
+		rotation_range=20,
 		#zoom_range=[0,0.3],
-		#width_shift_range=0.1,
-		#height_shift_range=0.1,
+		width_shift_range=0.1,
+		height_shift_range=0.1,
 		horizontal_flip=True,
 		vertical_flip=True)
 	test_datagen=ImageDataGenerator(
@@ -124,7 +128,7 @@ def main():
 		vertical_flip=False)
         
     
-	my_model.fit_generator(train_datagen.flow(traindata,trainlabel,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=120)
+	my_model.fit_generator(train_datagen.flow(traindata,trainlabel,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=200)
 	
     #fit   
     #my_model.fit(traindata, trainlabel, 
