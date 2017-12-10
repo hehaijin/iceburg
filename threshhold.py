@@ -13,10 +13,10 @@ submitfile=open(datapath)
 df=pd.read_csv(submitfile)
 
 for i, row in df.iterrows():
-	if row["is_iceberg"] >= 0.5:
-		df.set_value(i,'is_iceberg',0.9)
-	else:
-		df.set_value(i,'is_iceberg',0.1)
+	if row["is_iceberg"] >= 0.95:
+		df.set_value(i,'is_iceberg',0.95)
+	if row["is_iceberg"] < 0.05:
+		df.set_value(i,'is_iceberg',0.05)
 		
 df.to_csv("submission2.csv",index=False)
 		
