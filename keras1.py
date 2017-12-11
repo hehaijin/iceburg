@@ -111,12 +111,15 @@ def getModel():
 
 	x = Flatten(name='flatten')(output_vgg16_conv)
 	x = Dense(1024, activation='relu', name='fc1')(x)
+	x = Dropout(0.8)(x)
 	x = Dense(1024, activation='relu', name='fc2')(x)
 	x = Dense(2, activation='softmax', name='predictions')(x)
 	my_model = Model(input=input, output=x)
 	my_model.summary()
-
-	sgd = optimizers.SGD(lr=0.0005,momentum=0.7)
+	epochs=200
+	learning_rate=0.0005
+	decay_rate=learning_rate/(1+epochs/20)
+	sgd = optimizers.SGD(lr=learning_rate,momentum=0.7,decay=decay_rate)
 
 	my_model.compile(loss='binary_crossentropy',
 				  optimizer=sgd,
