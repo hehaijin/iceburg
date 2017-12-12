@@ -154,7 +154,7 @@ def main():
 	# my_model.fit_generator(train_datagen.flow(traindata,trainlabel,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=120)
 	
     #fit   
-	my_model.fit(traindata,trainlabel,batch_size=32, epochs=100, verbose=1)
+	my_model.fit(traindata,trainlabel,batch_size=32, epochs=30, verbose=1)
 	result= my_model.predict(testdata,batch_size=32, verbose=1)
 	
 	#result2=my_model.predict_generator(test_datagen.flow(testdata,batch_size=1),verbose=1,steps=8424)

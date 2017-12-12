@@ -70,15 +70,16 @@ def getModel():
 
 	x = Flatten(name='flatten')(output_vgg16_conv)
 	x = Dense(1024, activation='relu', name='fc1')(x)
-	x = Dropout(0.8)(x)
+	x = Dropout(0.5)(x)
 	x = Dense(1024, activation='relu', name='fc2')(x)
+	x = Dropout(0.5)(x)
 	x = Dense(2, activation='softmax', name='predictions')(x)
 	my_model = Model(input=input, output=x)
 	my_model.summary()
 	epochs=200
-	learning_rate=0.0005
-	decay_rate=learning_rate/(1+epochs/20)
-	sgd = optimizers.SGD(lr=learning_rate,momentum=0.7,decay=decay_rate)
+	learning_rate=0.0002
+	decay_rate=0.001
+	sgd = optimizers.SGD(lr=learning_rate,momentum=0.8)
 
 	my_model.compile(loss='binary_crossentropy',
 				  optimizer=sgd,
@@ -129,7 +130,7 @@ def main():
 		vertical_flip=False)
         
     
-	my_model.fit_generator(train_datagen.flow(traindata,trainlabel,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=200)
+	my_model.fit_generator(train_datagen.flow(traindata,trainlabel,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=400)
 	
     #fit   
     #my_model.fit(traindata, trainlabel, 
