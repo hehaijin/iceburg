@@ -93,6 +93,7 @@ def getModel():
 def preprocessing(data):
 	#can add more preprocessing here.
 	#but do not overlap with the imagedatagenerator.
+	print(data.shape)
 	for i in range(3):
 		for j in range(data.shape[0]):
 			m1=data[j,:,:,i].min()
