@@ -94,6 +94,7 @@ def getModel():
 def preprocessing(data):
 	#can add more preprocessing here.
 	#but do not overlap with the imagedatagenerator.
+	print(data.shape)
 	for i in range(3):
 		for j in range(data.shape[0]):
 			m1=data[j,:,:,i].min()
@@ -110,16 +111,16 @@ def main():
 	traindata,trainlabel,testdata,testid=create_dataset()
 
 	#preprocessing 
-	traindata=preprocessing(traindata) 
-	testdata=preprocessing(testdata)
+	#traindata=preprocessing(traindata) 
+	#testdata=preprocessing(testdata)
 	
 	
 	#I do not know how to use imagedatagenerator
 	train_datagen = ImageDataGenerator(
 		#samplewise_center=True,
 		#samplewise_std_normalization=True,
-		rotation_range=20,
-		#zoom_range=[0,0.3],
+		#rotation_range=20,
+		zoom_range=0.2,
 		width_shift_range=0.1,
 		height_shift_range=0.1,
 		horizontal_flip=True,
