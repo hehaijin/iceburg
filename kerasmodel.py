@@ -14,7 +14,7 @@ from skimage.restoration import (denoise_tv_chambolle, denoise_bilateral,
                                  denoise_wavelet, estimate_sigma, denoise_tv_bregman, denoise_nl_means)
 from skimage.filters import gaussian
 
-import cv2
+#import cv2
 
 from keras.preprocessing.image import ImageDataGenerator
 
@@ -69,6 +69,10 @@ def getModel():
 	output_vgg16_conv = model_vgg16_conv(input)
 
 	x = Flatten(name='flatten')(output_vgg16_conv)
+	print("check type")
+	print(type(x))
+	print(type(Flatten(name='flatten')))
+	Flatten(name='flatten')(100)
 	x = Dense(1024, activation='relu', name='fc1')(x)
 	x = Dropout(0.5)(x)
 	x = Dense(1024, activation='relu', name='fc2')(x)
