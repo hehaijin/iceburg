@@ -168,7 +168,7 @@ score2 = model.evaluate(X_valid, y_valid, verbose=1)
 print('Validation score:', score2[0])
 print('Validation accuracy:', score2[1])
 
-df_test = pd.read_json('../input/test.json')
+df_test = pd.read_json('./input/test.json')
 df_test.inc_angle = df_test.inc_angle.replace('na',0)
 Xtest = (get_scaled_imgs(df_test))
 pred_test = model.predict(Xtest)

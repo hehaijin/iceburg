@@ -6,6 +6,8 @@ from keras.models import Sequential,Model
 from keras.layers import Dense, Dropout, Activation, Flatten, Input
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.layers.convolutional import ZeroPadding2D
+from sklearn.model_selection import train_test_split
+
 from keras.utils import np_utils
 import os.path as path
 import os
@@ -69,10 +71,6 @@ def getModel():
 	output_vgg16_conv = model_vgg16_conv(input)
 
 	x = Flatten(name='flatten')(output_vgg16_conv)
-	print("check type")
-	print(type(x))
-	print(type(Flatten(name='flatten')))
-	Flatten(name='flatten')(100)
 	x = Dense(1024, activation='relu', name='fc1')(x)
 	x = Dropout(0.5)(x)
 	x = Dense(1024, activation='relu', name='fc2')(x)
@@ -118,36 +116,39 @@ def main():
 	#traindata=preprocessing(traindata) 
 	#testdata=preprocessing(testdata)
 	
-	
+	X_train, X_valid, y_train, y_valid = train_test_split(traindata, trainlabel, test_size=0.25)
+
 	#I do not know how to use imagedatagenerator
 	train_datagen = ImageDataGenerator(
 		#samplewise_center=True,
 		#samplewise_std_normalization=True,
 		#rotation_range=20,
-		zoom_range=0.2,
-		width_shift_range=0.1,
-		height_shift_range=0.1,
-		horizontal_flip=True,
+		#zoom_range=0.2,
+		#width_shift_range=0.1,
+		#height_shift_range=0.1,
+		#horizontal_flip=True,
 		vertical_flip=True)
 	test_datagen=ImageDataGenerator(
 		horizontal_flip=False,
 		vertical_flip=False)
         
     
-	my_model.fit_generator(train_datagen.flow(traindata,trainlabel,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=400)
+	my_model.fit_generator(train_datagen.flow(X_train,y_train,batch_size=32,shuffle=True),steps_per_epoch=50,epochs=400,validation_data=(X_valid,y_valid))
 	
     #fit   
     #my_model.fit(traindata, trainlabel, 
     #      batch_size=32, epochs=100, verbose=1)          
 	#predict          
+	
 	result= my_model.predict(testdata,batch_size=32, verbose=1)
 	
+	
 	#result2=my_model.predict_generator(test_datagen.flow(testdata,batch_size=1),verbose=1,steps=8424)
+	
 	#write to csv file.
 	submission=pd.DataFrame({"id": testid, "is_iceberg": result[:,1]}) 
 	submission.to_csv("submission.csv",index=False)
-	#submission2=pd.DataFrame({"id": testid, "is_iceberg": result2[:,1]}) 
-	#submission2.to_csv("submission2.csv",index=False)
+	
 
 if __name__ == "__main__":
     main()

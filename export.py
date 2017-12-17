@@ -1,6 +1,7 @@
 import cv2
 import json
 import pandas as pd
+import math
 import os
 import os.path as path
 import numpy as np
@@ -18,7 +19,12 @@ def main():
 			print(i)
 			t=data.iloc[i]['is_iceberg']
 			img= gin[i,:,:,0]
-			img=(img-img.min())*255/(img.max()-img.min())
+			mean=img.mean()
+			#img=(img-img.min())*255/(img.max()-img.min())
+			img=img-mean
+			img=img.clip(min=0)
+			#img=np.power(10,img)
+			img=img*255/img.max()
 			img=img.astype("uint8")
 			#print(img)
 			#print(img.min())
@@ -34,8 +40,8 @@ def main():
 			img2=img2.astype("uint8")
 			#print(img2)
 			img2=cv2.fastNlMeansDenoising(img2)
-			cv2.imwrite(path.join(outputpath,"band1-"+str(i)+"-"+str(t)+".jpg"),img)
-			cv2.imwrite(path.join(outputpath,"band2-"+str(i)+"-"+str(t)+".jpg"),img2)
+			cv2.imwrite(path.join(outputpath,str(i)+"band1-"+str(t)+".jpg"),img)
+			cv2.imwrite(path.join(outputpath,str(i)+"band2-"+str(t)+".jpg"),img2)
 		
 		
 
