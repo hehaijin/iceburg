@@ -119,7 +119,6 @@ def main():
 	
 	X_train, X_valid, y_train, y_valid = train_test_split(traindata, trainlabel, test_size=0.25)
 
-	#I do not know how to use imagedatagenerator
 	train_datagen = ImageDataGenerator(
 		#samplewise_center=True,
 		#samplewise_std_normalization=True,
