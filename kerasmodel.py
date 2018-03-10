@@ -76,7 +76,7 @@ def getModel():
 	x = Dense(1024, activation='relu', name='fc2')(x)
 	x = Dropout(0.5)(x)
 	x = Dense(2, activation='softmax', name='predictions')(x)
-	#上面这行用activation='sigmoid'会不会好一点，因为是binary classification
+	
 	my_model = Model(input=input, output=x)
 	my_model.summary()
 	epochs=200
